@@ -9,5 +9,6 @@ urlpatterns = [
     # class based views path
 
     path("employee/",views.Employee.as_view()),
+    path("employee/<int:pk>/",views.EmployeeDetails.as_view())
 
 ]

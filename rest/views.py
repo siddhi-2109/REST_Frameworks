@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from employee.models import Employees
+from django.http import Http404
 # Create your views here.
 @api_view(['GET','POST'])
 def viewstudent(request):
@@ -59,3 +60,16 @@ class Employee(APIView):
            return Response(serializer.data,status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class EmployeeDetails(APIView):
+    def get_object(self,pk):
+        try:
+            employee = Employees.objects.get(pk=pk)
+            return employee
+        except Employees.DoesNotExist:
+            raise Http404
+        
+    def get(self,request,pk):
+        employee =self.get_object(pk)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data,status=status.HTTP_200_OK)
